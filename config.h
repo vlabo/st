@@ -1,11 +1,11 @@
-/* See LICENSE file for copyright and license details. */
 
+/* See LICENSE file for copyright and license details. */
 /*
  * appearance
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Source Code Pro:pixelsize=23:antialias=true:autohint=true";
+static char *font = "hack:pixelsize=18:antialias=true:autohint=true";
 static int borderpx = 0;
 
 /*
@@ -124,7 +124,7 @@ static unsigned int defaultrcs = 0;
  * 6: Bar ("|")
  * 7: Snowman ("☃")
  */
-static unsigned int cursorshape = 2;
+static unsigned int cursorshape = 6;
 
 /*
  * Default columns and rows numbers
@@ -175,21 +175,13 @@ static MouseShortcut mshortcuts[] = {
 static Shortcut shortcuts[] = {
 	/* mask                 keysym          function        argument */
 	{ XK_ANY_MOD,           XK_Break,       sendbreak,      {.i =  0} },
-	{ ControlMask,          XK_Print,       toggleprinter,  {.i =  0} },
-	{ ShiftMask,            XK_Print,       printscreen,    {.i =  0} },
-	{ XK_ANY_MOD,           XK_Print,       printsel,       {.i =  0} },
-	{ ShiftMask,            XK_Prior,       zoom,           {.f = +1} },
-	{ ShiftMask,            XK_Next,        zoom,           {.f = -1} },
-	{ ShiftMask,            XK_Home,        zoomreset,      {.f =  0} },
+	{ ControlMask,          XK_equal,       zoom,           {.f = +1} },
+	{ ControlMask,          XK_minus,       zoom,           {.f = -1} },
 	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
 	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
-	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
-    { MODKEY,               XK_Up,          kscrollup,      {.i =  1} },
-    { MODKEY,               XK_Down,        kscrolldown,    {.i =  1} },
-    { XK_ANY_MOD,           XK_Page_Up,     kscrollup,      {.i = -1} },
-    { XK_ANY_MOD,           XK_Page_Down,   kscrolldown,    {.i = -1} }
+	{ TERMMOD,              XK_P,    		ttysend,        {.s = "\x1bOP"} }
 };
 
 /*
@@ -231,8 +223,8 @@ static uint ignoremod = Mod2Mask|XK_SWITCH_MOD;
  */
 static Key key[] = {
 	/* keysym           mask            string      appkey appcursor */
-	{ XK_KP_Home,       ShiftMask,      "\033[2J",       0,   -1},
-	{ XK_KP_Home,       ShiftMask,      "\033[1;2H",     0,   +1},
+	//{ XK_KP_Home,       ShiftMask,      "\033[2J",       0,   -1},
+	{ XK_KP_Home,       ShiftMask,      "\033[1;2H",     0,   0},
 	{ XK_KP_Home,       XK_ANY_MOD,     "\033[H",        0,   -1},
 	{ XK_KP_Home,       XK_ANY_MOD,     "\033[1~",       0,   +1},
 	{ XK_KP_Up,         XK_ANY_MOD,     "\033Ox",       +1,    0},
@@ -252,7 +244,7 @@ static Key key[] = {
 	{ XK_KP_Begin,      XK_ANY_MOD,     "\033[E",        0,    0},
 	{ XK_KP_End,        ControlMask,    "\033[J",       -1,    0},
 	{ XK_KP_End,        ControlMask,    "\033[1;5F",    +1,    0},
-	{ XK_KP_End,        ShiftMask,      "\033[K",       -1,    0},
+	//{ XK_KP_End,        ShiftMask,      "\033[K",       -1,    0},
 	{ XK_KP_End,        ShiftMask,      "\033[1;2F",    +1,    0},
 	{ XK_KP_End,        XK_ANY_MOD,     "\033[4~",       0,    0},
 	{ XK_KP_Next,       ShiftMask,      "\033[6;2~",     0,    0},
@@ -339,14 +331,16 @@ static Key key[] = {
 	{ XK_Delete,        XK_ANY_MOD,     "\033[3~",      +1,    0},
 	{ XK_BackSpace,     XK_NO_MOD,      "\177",          0,    0},
 	{ XK_BackSpace,     Mod1Mask,       "\033\177",      0,    0},
-	{ XK_Home,          ShiftMask,      "\033[2J",       0,   -1},
-	{ XK_Home,          ShiftMask,      "\033[1;2H",     0,   +1},
+	//{ XK_Home,          ShiftMask,      "\033[2J",       0,   -1},
+	{ XK_Home,	ControlMask|ShiftMask,	"\033[1;6H",	 0,   -1},
+	{ XK_Home,          ShiftMask,      "\033[1;2H",     0,   -1},
+	{ XK_Home,			ControlMask,	"\033[1;5H",	 0,   -1},
 	{ XK_Home,          XK_ANY_MOD,     "\033[H",        0,   -1},
 	{ XK_Home,          XK_ANY_MOD,     "\033[1~",       0,   +1},
-	{ XK_End,           ControlMask,    "\033[J",       -1,    0},
-	{ XK_End,           ControlMask,    "\033[1;5F",    +1,    0},
-	{ XK_End,           ShiftMask,      "\033[K",       -1,    0},
-	{ XK_End,           ShiftMask,      "\033[1;2F",    +1,    0},
+	//{ XK_End,           ControlMask,    "\033[J",       -1,    0},
+	{ XK_End,           ControlMask,    "\033[1;5F",    -1,    0},
+	//{ XK_End,           ShiftMask,      "\033[K",       -1,    0},
+	{ XK_End,           ShiftMask,      "\033[1;2F",    -1,    0},
 	{ XK_End,           XK_ANY_MOD,     "\033[4~",       0,    0},
 	{ XK_Prior,         ControlMask,    "\033[5;5~",     0,    0},
 	{ XK_Prior,         ShiftMask,      "\033[5;2~",     0,    0},
